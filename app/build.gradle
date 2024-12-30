@@ -25,6 +25,8 @@ dependencies {
     implementation 'com.google.guava:guava:32.1.1-jre'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.7.2'
+
+    implementation 'org.mindrot:jbcrypt:0.4'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -37,4 +39,8 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'ticketbooking.App'
+}
+
+tasks.named('run') {
+  standardInput = System.in
 }

@@ -3,8 +3,91 @@
  */
 package ticketbooking;
 
+import java.util.*;
+
+import ticketbooking.entities.User;
+import ticketbooking.services.UserBookingService;
+import ticketbooking.utils.UserServiceUtil;
+import ticketbooking.services.TrainService;
+
 public class App {
   public static void main(String[] args) {
 
+    System.out.println("Running Train Ticket Booking Application");
+    Scanner scanner = new Scanner(System.in);
+    int option = 0;
+    UserBookingService userBookingService;
+    UserServiceUtil userServiceUtil = new UserServiceUtil();
+    TrainService trainService;
+
+    try {
+      userBookingService = new UserBookingService();
+      trainService = new TrainService();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return;
+    }
+
+    while (option != 7) {
+      System.out.println("1. Sign up");
+      System.out.println("2. Login");
+      System.out.println("3. Fetch Bookings ");
+      System.out.println("4. Search Trains");
+      System.out.println("5. Book a Seat");
+      System.out.println("6. Cancel a Booking");
+      System.out.println("7. Exit");
+      System.out.println("Enter your choice: ");
+      option = scanner.nextInt();
+
+      switch (option) {
+        case 1:
+          System.out.println("Enter your name: ");
+          String name = scanner.next();
+          System.out.println("Enter your password: ");
+          String password = scanner.next();
+          String hashedPassword = UserServiceUtil.hashPassword(password);
+          User u1 = new User(name, password, hashedPassword, new ArrayList<>(), UUID.randomUUID().toString());
+          userBookingService.signUp(u1);
+          break;
+        case 2:
+          System.out.println("Enter your name: ");
+          String name1 = scanner.next();
+          System.out.println("Enter your password: ");
+          String password1 = scanner.next();
+          String hashedPassword1 = UserServiceUtil.hashPassword(password1);
+          User u2 = new User(name1, password1, hashedPassword1, new ArrayList<>(), UUID.randomUUID().toString());
+
+          try {
+            userBookingService = new UserBookingService(u2);
+          } catch (Exception e) {
+            return;
+          }
+          break;
+
+        case 3:
+          userBookingService.fetchBooking();
+          break;
+
+        case 4:
+          trainService.printTrainlist();
+          break;
+
+        case 5:
+          System.out.println("To be implemented");
+          break;
+
+        case 6:
+          try {
+            userBookingService.cancelBooking();
+          } catch (Exception e) {
+            System.out.println("Error cancelling booking");
+          }
+          break;
+
+        case 7:
+          System.out.println("Exiting the application");
+          break;
+      }
+    }
   }
 }
